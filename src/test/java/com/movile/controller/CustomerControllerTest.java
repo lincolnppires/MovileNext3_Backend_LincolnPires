@@ -37,5 +37,14 @@ public class CustomerControllerTest {
 		List<Integer> listCustomer = jsonContext.read("$.content[*].customerResource.customer_id");
 		assertEquals(3, listCustomer.size());					
 	}
+	
+	@Test
+	public void whenGetCustomerOrdersWithSize3Pagination_thenOK() {		
+		String result = given().header("Accept", "application/hal+json").get("/movile/customers/1001")
+				.andReturn().asString();
+		DocumentContext jsonContext = JsonPath.parse(result);		
+		List<Integer> listOrderCustomer = jsonContext.read("$.content[*].customerOrderResource.orders.description");
+		assertEquals(3, listOrderCustomer.size());					
+	}
 
 }
