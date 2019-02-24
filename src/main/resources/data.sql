@@ -1,6 +1,13 @@
 INSERT INTO customer VALUES(1001, 'Customer 1', '2018-02-24');
 INSERT INTO customer VALUES(1002, 'Customer 2', '2018-02-25');
 INSERT INTO customer VALUES(1003, 'Customer 3', '2018-02-26');
+INSERT INTO customer VALUES(1004, 'Customer 4', '2018-02-26');
+INSERT INTO customer VALUES(1005, 'Customer 5', '2018-02-26');
+INSERT INTO customer VALUES(1006, 'Customer 6', '2018-02-26');
+INSERT INTO customer VALUES(1007, 'Customer 7', '2018-02-26');
+INSERT INTO customer VALUES(1008, 'Customer 8', '2018-02-26');
+INSERT INTO customer VALUES(1009, 'Customer 9', '2018-02-26');
+INSERT INTO customer VALUES(1010, 'Customer 10', '2018-02-26');
 
 INSERT INTO order_customer VALUES(7001, 'Order custormer 1001 - 1', 'OPEN', 10.00, 1001);
 INSERT INTO order_customer VALUES(7002, 'Order custormer 1001 - 2', 'OPEN', 20.00, 1001);
