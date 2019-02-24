@@ -30,11 +30,11 @@ public class CustomerControllerTest {
 	}
 
 	@Test
-	public void whenGetAllCustomer_thenOK() {		
-		String result = given().header("Accept", "application/hal+json").get("/customers")
+	public void whenGetAllCustomerWithSize3Pagination_thenOK() {		
+		String result = given().header("Accept", "application/hal+json").get("/movile/customers")
 				.andReturn().asString();
 		DocumentContext jsonContext = JsonPath.parse(result);		
-		List<Integer> listCustomer = jsonContext.read("$.customers[*].customer.id_customer");
+		List<Integer> listCustomer = jsonContext.read("$.content[*].customerResource.customer_id");
 		assertEquals(3, listCustomer.size());					
 	}
 
