@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +27,7 @@ public class OrderCustomer {
 	@Enumerated(EnumType.STRING)
 	private StatusOrder status;
 	
+	@JsonIgnore
 	@ManyToOne
 	private Customer customer;	
 	

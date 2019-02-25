@@ -2,6 +2,7 @@ package com.movile.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.movile.entity.Customer;
 import com.movile.repository.CustomerRepository;
 import com.movile.resource.CustomerDataResource;
+import com.movile.resource.CustomerOrderDataResource;
+import com.movile.resource.CustomerOrderResource;
 import com.movile.resource.CustomerResource;
 import com.movile.resource.PageResource;
 
@@ -52,6 +55,19 @@ public class CustomerServices {
 		return new PageResource<CustomerDataResource>(customerDataResourcePage, "page", "size");
 
 		
+	}
+
+	public CustomerOrderDataResource findById(Long id) {
+		CustomerOrderDataResource customerOrderDataResource = new CustomerOrderDataResource(new CustomerOrderResource());
+		Optional<Customer> customerData = customerRepository.findById(id);
+		
+		if(customerData.isPresent()) {
+			customerOrderDataResource.setCustomerOrderId(customerData.get().getId());
+			customerOrderDataResource.setName(customerData.get().getName());
+			customerOrderDataResource.setRegistrationDate(customerData.get().getRegistrationDate());
+			customerOrderDataResource.setOrders(customerData.get().getOrders());			
+ 		}
+		return customerOrderDataResource;
 	}
 
 }

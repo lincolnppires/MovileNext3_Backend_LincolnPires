@@ -1,14 +1,20 @@
 package com.movile.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.movile.resource.CustomerDataResource;
+import com.movile.resource.CustomerOrderDataResource;
 import com.movile.resource.PageResource;
 import com.movile.services.CustomerServices;
 
@@ -36,6 +42,23 @@ public class CustomerController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(customerDataResourcePage);		
 	}
+	
+	@GetMapping("customer/{id}")
+	public ResponseEntity<Resource<CustomerOrderDataResource>> findById(@PathVariable Long id){
+		
+		final CustomerOrderDataResource customerOrderDataResource = customerServices.findById(id);
+		final List<Link> links = customerOrderDataResource.retrieveLinks();
+		
+		Resource<CustomerOrderDataResource> resource = new Resource<CustomerOrderDataResource>(customerOrderDataResource, links);
+						
+		if((customerOrderDataResource.getCustomerOrderId() == null)) {
+			customerOrderDataResource.setName("NOT FOUND");			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resource);			
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).body(resource);		
+	}
+
 
 	
 }
