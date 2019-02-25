@@ -24,6 +24,7 @@ public class CustomerDataResource extends ResourceSupport {
 	public void addLinks() {			
 		add(linkTo(methodOn(CustomerController.class).findAll(customerResource.getPage(), customerResource.getSize()))
 				.withSelfRel());
+		add(linkTo(methodOn(CustomerController.class).findById(customerResource.getId())).withRel("orders"));
 	}
 	
 	public CustomerResource getCustomerResource() {

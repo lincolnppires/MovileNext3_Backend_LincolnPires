@@ -25,7 +25,8 @@ public class CustomerOrderDataResource {
 	
 	public List<Link> retrieveLinks() {
 		Link customerOrderLink = linkTo(methodOn(CustomerController.class).findById(customerOrderResource.getId())).withSelfRel();
-		return Arrays.asList(customerOrderLink);
+		Link customersLink = linkTo(methodOn(CustomerController.class).findAll(0, 3)).withRel("customers");
+		return Arrays.asList(customerOrderLink, customersLink);
 	}
 
 	public CustomerOrderResource getCustomerOrderResource() {
