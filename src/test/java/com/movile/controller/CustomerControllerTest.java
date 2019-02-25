@@ -16,6 +16,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -39,12 +40,20 @@ public class CustomerControllerTest {
 	}
 	
 	@Test
-	public void whenGetCustomerOrdersWithSize3Pagination_thenOK() {		
-		String result = given().header("Accept", "application/hal+json").get("/movile/customers/1001")
+	public void whenGetCustomerOrdersById_thenOK() {		
+		String result = given().header("Accept", "application/hal+json").get("/movile/customer/1001")
 				.andReturn().asString();
 		DocumentContext jsonContext = JsonPath.parse(result);		
-		List<Integer> listOrderCustomer = jsonContext.read("$.content[*].customerOrderResource.orders.description");
-		assertEquals(3, listOrderCustomer.size());					
+		List<Integer> listOrderCustomer = jsonContext.read("$.customerOrderResource.customer_orders[*].id");
+		assertEquals(6, listOrderCustomer.size());					
 	}
+	
+	@Test
+	public void whenGetUserById_thenNotFound() {		
+		Response response = given().header("Accept", "application/hal+json").get("/movile/customer/999999")
+				.andReturn();				
+		assertEquals(404, response.getStatusCode());				
+	}
+
 
 }
