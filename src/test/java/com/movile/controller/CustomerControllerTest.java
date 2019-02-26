@@ -3,6 +3,7 @@ package com.movile.controller;
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import com.movile.resource.OrderResource;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -55,5 +57,13 @@ public class CustomerControllerTest {
 		assertEquals(404, response.getStatusCode());				
 	}
 
+	@Test
+	public void whenPostNewOrderToCustomer_temOk() {
+		OrderResource newOrder = new OrderResource(9001l, "Order custormer 1003 - 3", new BigDecimal(3000.00));
+		
+		given().header("Accept", "application/hal+json").contentType("application/json")
+			.body(newOrder).expect().statusCode(201)
+			.when().post("/movile/customer/9001/order");
+	}
 
 }
