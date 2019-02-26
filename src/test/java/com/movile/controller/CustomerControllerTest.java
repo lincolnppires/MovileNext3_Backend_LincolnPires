@@ -59,11 +59,11 @@ public class CustomerControllerTest {
 
 	@Test
 	public void whenPostNewOrderToCustomer_temOk() {
-		OrderResource newOrder = new OrderResource(9001l, "Order custormer 1003 - 3", new BigDecimal(3000.00));
+		OrderResource newOrder = new OrderResource(1003l, "Order custormer 1003 - 3", new BigDecimal(3000.00));
 		
 		given().header("Accept", "application/hal+json").contentType("application/json")
 			.body(newOrder).expect().statusCode(201)
-			.when().post("/movile/customer/9001/order");
+			.when().post("/movile/customer/1003/order");
 	}
 
 }

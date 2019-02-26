@@ -66,9 +66,18 @@ public class CustomerController {
 	}
 	
 	@PostMapping("customer/{id}/order")
-	public ResponseEntity<OrderResource> addOrder(@Valid @RequestBody OrderResource orderResource, BindingResult result) {
+	public ResponseEntity<OrderResource> addOrder(@RequestBody OrderResource orderResource, BindingResult result) {
+
+		if(orderResource.getCustomer_id() == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(orderResource);
+		}
 		
-		return null;
+		if(customerServices.save(orderResource)) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(orderResource);
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(orderResource);
+		}
 	}
 
 

@@ -8,6 +8,8 @@ import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
+import org.springframework.statemachine.listener.StateMachineListenerAdapter;
+import org.springframework.statemachine.state.State;
 
 @Configuration
 @EnableStateMachine
@@ -20,23 +22,27 @@ public class OrderStateMachine extends EnumStateMachineConfigurerAdapter<States,
 
 	@Override
 	public void configure(StateMachineTransitionConfigurer<States, Events> transitions) throws Exception {
-		transitions.withExternal()
-				.source(States.OPEN).target(States.CLOSED).event(Events.payment_received)
+		transitions
+			.withExternal()
+				.source(States.OPEN).target(States.OPEN).event(Events.OPEN)
 			.and()
 			.withExternal()
-				.source(States.OPEN).target(States.CANCELED).event(Events.cancel)
+				.source(States.OPEN).target(States.CLOSED).event(Events.PAYMENT_RECEIVED)
 			.and()
 			.withExternal()
-				.source(States.OPEN).target(States.EVALUATION).event(Events.in_evaluation)
+				.source(States.OPEN).target(States.CANCELED).event(Events.CANCEL)
 			.and()
 			.withExternal()
-				.source(States.EVALUATION).target(States.CLOSED).event(Events.payment_received)
+				.source(States.OPEN).target(States.EVALUATION).event(Events.IN_EVALUATION)
 			.and()
 			.withExternal()
-				.source(States.EVALUATION).target(States.CANCELED).event(Events.cancel)
+				.source(States.EVALUATION).target(States.CLOSED).event(Events.PAYMENT_RECEIVED)
 			.and()
 			.withExternal()
-				.source(States.CANCELED).target(States.OPEN).event(Events.open);
+				.source(States.EVALUATION).target(States.CANCELED).event(Events.CANCEL)
+			.and()
+			.withExternal()
+				.source(States.CANCELED).target(States.OPEN).event(Events.OPEN);
 	}
 
 	@Override
@@ -45,6 +51,14 @@ public class OrderStateMachine extends EnumStateMachineConfigurerAdapter<States,
 			.withConfiguration()
 			.autoStartup(true)
 			.listener(new StateMachineListener());
+	}
+	
+	private static final class StateMachineListener extends StateMachineListenerAdapter<States, Events> { 
+		  @Override 
+		  public void stateChanged(State<States, Events> from, State<States, Events> to) {
+		    System.out.println("Order state changed to " + to.getId()); 		    
+		  }
+		  
 	}
 
 }

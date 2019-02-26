@@ -1,5 +1,5 @@
 package com.movile.statemachine;
 
 public enum Events {
-	open, in_evaluation, cancel, payment_received
+	OPEN, IN_EVALUATION, CANCEL, PAYMENT_RECEIVED
 }
