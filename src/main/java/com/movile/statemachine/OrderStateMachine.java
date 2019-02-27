@@ -1,6 +1,7 @@
 package com.movile.statemachine;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachine;
@@ -10,6 +11,9 @@ import org.springframework.statemachine.config.builders.StateMachineStateConfigu
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
+
+import com.movile.command.Command;
+import com.movile.command.Commands;
 
 @Configuration
 @EnableStateMachine
@@ -56,7 +60,9 @@ public class OrderStateMachine extends EnumStateMachineConfigurerAdapter<States,
 	private static final class StateMachineListener extends StateMachineListenerAdapter<States, Events> { 
 		  @Override 
 		  public void stateChanged(State<States, Events> from, State<States, Events> to) {
-		    System.out.println("Order state changed to " + to.getId()); 		    
+		    System.out.println("Order state changed from "  + to.getId());
+		    List<Command> commands = Commands.getCommands();	        
+	        commands.forEach(c -> c.execute());
 		  }
 		  
 	}
