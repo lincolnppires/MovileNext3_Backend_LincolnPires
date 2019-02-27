@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Service;
 
+import com.movile.builder.OrderCustomerBuilder;
 import com.movile.entity.Customer;
 import com.movile.entity.OrderCustomer;
 import com.movile.entity.StatusOrder;
@@ -81,11 +82,11 @@ public class CustomerServices {
 	public boolean save(@Valid OrderResource orderResource) {		
 		Optional<Customer> customer = customerRepository.findById((Long)orderResource.getCustomer_id());
 		
-		OrderCustomer order = new OrderCustomer();
-		order.setStatus(StatusOrder.OPEN);
-		order.setValue(orderResource.getValue());
-		order.setDescription(orderResource.getDescription());
-		customer.get().getOrders().add(order);		
+		OrderCustomer order = OrderCustomerBuilder.newBuilder()
+								.description(orderResource.getDescription())
+								.value(orderResource.getValue())
+								.status(StatusOrder.OPEN)
+								.build();
 		
 		customerRepository.save(customer.get());
 		
