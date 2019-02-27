@@ -18,6 +18,7 @@ import com.movile.builder.OrderCustomerBuilder;
 import com.movile.entity.Customer;
 import com.movile.entity.OrderCustomer;
 import com.movile.entity.StatusOrder;
+import com.movile.exceptions.ErroAddOrderException;
 import com.movile.repository.CustomerRepository;
 import com.movile.resource.CustomerDataResource;
 import com.movile.resource.CustomerOrderDataResource;
@@ -88,7 +89,9 @@ public class CustomerServices {
 								.status(StatusOrder.OPEN)
 								.build();
 		
-		customerRepository.save(customer.get());
+		Customer customerResult = customerRepository.save(customer.get());
+		if(customerResult.getOrders().isEmpty())
+			throw new ErroAddOrderException("Problem adding new order");
 		
 		boolean sendEvent = stateMachine.sendEvent(Events.OPEN);
 		return sendEvent;
